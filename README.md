@@ -57,7 +57,10 @@ A futuristic web-based control interface for a space vehicle simulation. Built w
 ## Installation
 
 ```bash
+git clone https://github.com/TM101178/spaceship-interface2.git
 npm install
+npm install express
+npm install spaceship-101178
 npm start
 ```
 
