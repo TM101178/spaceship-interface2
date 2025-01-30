@@ -1,0 +1,583 @@
+/* Fix scrolling */
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100%;
+    margin: 0;
+    padding: 20px;
+    font-family: 'Orbitron', 'Arial', sans-serif;
+    line-height: 1.6;
+    background: #0a0a2a;
+    color: #00ff9d;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Stars layer 1 - small twinkling stars */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background-image: 
+        radial-gradient(white, rgba(255,255,255,.2) 1px, transparent 2px),
+        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 1px),
+        radial-gradient(white, rgba(255,255,255,.1) 1px, transparent 1px);
+    background-size: 350px 350px, 200px 200px, 150px 150px;
+    background-position: 0 0, 40px 60px, 130px 270px;
+    animation: drift 60s linear infinite;
+    z-index: -2;
+}
+
+/* Stars layer 2 - larger stars with glow */
+.space-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(1px 1px at 25% 25%, white, transparent),
+        radial-gradient(1px 1px at 50% 50%, white, transparent),
+        radial-gradient(1px 1px at 75% 75%, white, transparent),
+        radial-gradient(2px 2px at 15% 85%, white, transparent),
+        radial-gradient(2px 2px at 85% 15%, white, transparent);
+    background-size: 250px 250px;
+    z-index: -2;
+}
+
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    filter: blur(1px);
+    animation: twinkle var(--duration, 4s) infinite var(--delay, 0s);
+}
+
+/* Planets */
+.planet {
+    position: absolute;
+    border-radius: 50%;
+    box-shadow: inset -25px -25px 40px rgba(0,0,0,.5);
+    background-size: cover;
+    will-change: transform;
+    animation: orbit var(--orbit-duration, 60s) linear infinite;
+}
+
+.planet-1 {
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle at 30% 30%, #4a90e2, #1b3751);
+    top: 15%;
+    left: 10%;
+    animation: float 20s infinite ease-in-out;
+}
+
+.planet-2 {
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle at 30% 30%, #e24a4a, #511b1b);
+    top: 65%;
+    right: 15%;
+    animation: float 15s infinite ease-in-out reverse;
+}
+
+/* Nebula effects */
+.nebula {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(64, 0, 255, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(0, 255, 157, 0.1) 0%, transparent 40%);
+    filter: blur(20px);
+    z-index: -1;
+    opacity: 0.7;
+    transform: translateZ(0);
+}
+
+/* Animations */
+@keyframes drift {
+    from { transform: translate(0, 0); }
+    to { transform: translate(-50%, -50%); }
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.7); }
+}
+
+@keyframes orbit {
+    from { transform: rotate(0deg) translateX(100px) rotate(0deg); }
+    to { transform: rotate(360deg) translateX(100px) rotate(-360deg); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(10px, -10px); }
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 40px;
+    transform: translateZ(0);
+}
+
+h1 {
+    color: #00ff9d;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+    margin-bottom: 30px;
+    border-bottom: 2px solid #00ff9d;
+    padding-bottom: 15px;
+}
+
+h2 {
+    color: #00ccff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 30px;
+}
+
+.status-panel, .control-panel {
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid rgba(0, 255, 157, 0.5);
+    border-radius: 10px;
+    background: linear-gradient(
+        135deg,
+        rgba(0, 40, 60, 0.8),
+        rgba(0, 20, 40, 0.8)
+    );
+    box-shadow: 
+        0 0 20px rgba(0, 255, 157, 0.1),
+        inset 0 0 20px rgba(0, 255, 157, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Add scanning line effect */
+.status-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 3px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 255, 157, 0.8),
+        transparent
+    );
+    animation: scan 4s linear infinite;
+}
+
+@keyframes scan {
+    0% {
+        transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(1000%);
+    }
+}
+
+.status-display {
+    background-color: rgba(0, 40, 60, 0.8);
+    padding: 15px;
+    border-radius: 8px;
+    white-space: pre-wrap;
+    font-family: 'Courier New', monospace;
+    color: #00ff9d;
+    border: 1px solid #00ccff;
+    box-shadow: inset 0 0 10px rgba(0, 204, 255, 0.2);
+}
+
+.control-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+label {
+    font-weight: bold;
+    color: #00ccff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9em;
+}
+
+select, input {
+    padding: 12px;
+    background-color: rgba(0, 20, 40, 0.8);
+    border: 1px solid #00ff9d;
+    border-radius: 6px;
+    color: #00ff9d;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+select:focus, input:focus {
+    outline: none;
+    box-shadow: 0 0 15px rgba(0, 255, 157, 0.3);
+    border-color: #00ccff;
+}
+
+.btn {
+    background: linear-gradient(45deg, #004d40, #00796b);
+    color: #00ff9d;
+    padding: 12px 25px;
+    border: 1px solid #00ff9d;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 0%,
+        rgba(0, 255, 157, 0.2) 50%,
+        transparent 100%
+    );
+    transition: all 0.3s ease;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.btn:hover {
+    background: linear-gradient(45deg, #00796b, #009688);
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.4);
+}
+
+.btn:hover::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+/* Voeg een pulserende animatie toe aan belangrijke elementen */
+@keyframes pulse {
+    0% { box-shadow: 0 0 5px rgba(0, 255, 157, 0.2); }
+    50% { box-shadow: 0 0 20px rgba(0, 255, 157, 0.4); }
+    100% { box-shadow: 0 0 5px rgba(0, 255, 157, 0.2); }
+}
+
+.status-panel, .control-panel {
+    animation: pulse 4s infinite;
+}
+
+/* Voeg een Google Font toe voor een futuristischer uiterlijk */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+
+.main-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 20px;
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+    min-width: 0;
+}
+
+.status-item {
+    background: rgba(0, 40, 60, 0.8);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #00ff9d;
+    min-width: 0;
+    word-wrap: break-word;
+}
+
+.battery-level {
+    width: 100%;
+    height: 25px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #00ff9d;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.battery-fill {
+    height: 100%;
+    background: #00ff9d;
+    transition: width 0.3s ease;
+    text-align: center;
+    line-height: 25px;
+    color: #000;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.sensor-item, .resource-item, .reading-item {
+    padding: 5px 10px;
+    margin: 5px 0;
+    background: rgba(0, 255, 157, 0.1);
+    border-radius: 4px;
+    border: 1px solid #00ff9d;
+}
+
+.reading-item {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 15px;
+    padding: 10px 15px;
+    margin: 8px 0;
+}
+
+.reading-label {
+    color: #00ccff;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.reading-value {
+    text-align: right;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+.system-time {
+    color: #00ff9d;
+    text-align: center;
+    font-family: 'Share Tech Mono', monospace;
+    margin-bottom: 20px;
+}
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 8px;
+    color: #fff;
+    animation: slideIn 0.3s ease-out;
+}
+
+.notification.success {
+    background: rgba(0, 255, 157, 0.9);
+}
+
+.notification.error {
+    background: rgba(255, 62, 62, 0.9);
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+.btn.success {
+    animation: pulse 0.5s ease-out;
+}
+
+/* Update sleep mode styling */
+.sleep-mode {
+    position: relative;
+    opacity: 0.7;
+}
+
+/* Separate styling for status panel sleep mode */
+.status-panel.sleep-mode::after {
+    content: 'SLEEP MODE ACTIVE';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #00ff9d;
+    font-size: clamp(1em, 4vw, 1.5em);
+    text-shadow: 0 0 10px #00ff9d;
+    animation: pulse 2s infinite;
+    width: 90%;
+    text-align: center;
+    z-index: 1;
+}
+
+/* Different styling for system time sleep mode */
+.system-time.sleep-mode {
+    position: relative;
+    padding-right: 120px; /* Make room for the sleep indicator */
+}
+
+.system-time.sleep-mode::after {
+    content: '[SLEEPING]';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00ff9d;
+    font-size: 0.9em;
+    text-shadow: 0 0 5px #00ff9d;
+    animation: pulse 2s infinite;
+}
+
+.battery-fill.critical {
+    animation: flash 1s infinite;
+}
+
+@keyframes flash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Add media queries for different screen sizes */
+@media (max-width: 1200px) {
+    .container {
+        margin: 15px;
+    }
+}
+
+@media (max-width: 900px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .status-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    .status-grid {
+        grid-template-columns: 1fr; /* Single column on mobile */
+    }
+
+    h1 {
+        font-size: 1.5em;
+        letter-spacing: 2px;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .status-panel, .control-panel {
+        padding: 15px;
+        margin: 10px 0;
+    }
+
+    .form-group {
+        gap: 5px;
+    }
+
+    select, input {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .notification {
+        left: 10px;
+        right: 10px;
+        text-align: center;
+    }
+
+    .reading-item {
+        font-size: 0.9em; /* Slightly smaller text on mobile */
+    }
+}
+
+.resource-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 15px;
+    margin: 5px 0;
+    background: rgba(0, 255, 157, 0.1);
+    border-radius: 4px;
+    border: 1px solid #00ff9d;
+    transition: all 0.3s ease;
+}
+
+.resource-item:hover {
+    background: rgba(0, 255, 157, 0.2);
+    transform: scale(1.02);
+}
+
+.resource-amount {
+    background: rgba(0, 255, 157, 0.2);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+/* Add animation for new resources */
+@keyframes resourceFound {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.resource-item.new {
+    animation: resourceFound 0.5s ease-out;
+}
+
+/* Update movement history styles */
+.movement-history {
+    max-height: 200px;
+    overflow-y: auto;
+    margin: 10px 0;
+    padding-right: 5px;
+}
+
+.battery-status {
+    margin-top: 8px;
+    text-align: center;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-shadow: 0 0 5px currentColor;
+    transition: all 0.3s ease;
+}
+
+.battery-status.critical-msg {
+    animation: flash 1s infinite;
+}
+
+@keyframes resourceCollected {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); filter: brightness(1.5); }
+    100% { transform: scale(1); }
+}
+
+.resource-item.collected {
+    animation: resourceCollected 0.8s ease-out;
+} 

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Space Vehicle Control</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>SPACE VEHICLE CONTROL INTERFACE</h1>
+            <div class="system-time"></div>
+        </div>
+        
+        <div class="main-grid">
+            <div class="status-panel">
+                <h2>SYSTEM STATUS</h2>
+                <div class="status-grid">
+                    <div class="status-item battery">
+                        <label>BATTERY</label>
+                        <div class="battery-level">
+                            <div class="battery-fill"></div>
+                        </div>
+                    </div>
+                    <div class="status-item">
+                        <label>ACTIVE SENSORS</label>
+                        <div class="sensor-list"></div>
+                    </div>
+                    <div class="status-item">
+                        <label>SENSOR READINGS</label>
+                        <div class="readings-list"></div>
+                    </div>
+                    <div class="status-item">
+                        <label>RESOURCES</label>
+                        <div class="resource-list"></div>
+                    </div>
+                    <div class="status-item">
+                        <label>MOVEMENT HISTORY</label>
+                        <div class="movement-history"></div>
+                    </div>
+                </div>
+                <button onclick="getStatus()" class="btn refresh-btn">
+                    <span class="btn-text">REFRESH STATUS</span>
+                </button>
+            </div>
+
+            <div class="control-panel">
+                <h2>COMMAND INTERFACE</h2>
+                <form onsubmit="submitAction(event)" class="control-form">
+                    <div class="form-group">
+                        <label for="action">SELECT ACTION:</label>
+                        <select id="action" name="action" required onchange="updateDetailsInput()">
+                            <option value="move">MOVE VEHICLE</option>
+                            <option value="toggleSensor">TOGGLE SENSOR</option>
+                            <option value="mine">MINE RESOURCES</option>
+                            <option value="sleep">SLEEP MODE</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="details">COMMAND DETAILS:</label>
+                        <select id="details" name="details" required>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <button type="submit" class="btn execute-btn">
+                        <span class="btn-text">EXECUTE COMMAND</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="space-bg">
+        <div class="nebula"></div>
+        <div class="planet planet-1"></div>
+        <div class="planet planet-2"></div>
+    </div>
+    <script src="/script.js"></script>
+    <script>
+    // Add dynamic stars
+    function createStars() {
+        const spaceBg = document.querySelector('.space-bg');
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+            star.style.setProperty('--delay', Math.random() * 4 + 's');
+            spaceBg.appendChild(star);
+        }
+    }
+    createStars();
+    </script>
+</body>
+</html> 
